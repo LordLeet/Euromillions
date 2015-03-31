@@ -14,7 +14,7 @@ public class Drawer {
 
 	private Random r = new Random();
 	private int drawn;
-	
+
 	private Document EuromillionsDocument; 
 
 	public String language;
@@ -23,11 +23,75 @@ public class Drawer {
 	private String stars;
 	private String outputStars;	
 	private String finalOutput;
+	private LinkedList<Integer> correctNumbers = new LinkedList<Integer>();
+	private LinkedList<Integer> correctStars = new LinkedList<Integer>();
 
 
-	public String retreiveResults() throws IOException {
+	private void connect() throws IOException {
 
 		EuromillionsDocument = Jsoup.connect("http://www.euromilhoes.com/").get();
+
+	}
+	
+	public void compareWithdraw(LinkedList<Integer> userNumbersDraw , LinkedList<Integer> userStarsDraw ) throws IOException {
+
+		connect();
+
+		String[] numbersString = outputNumbers.split(",");
+
+		int[] numbersIntegers = new int[numbersString.length];
+
+		for (int i = 0; i < numbersString.length; i++) {
+			try {
+				numbersIntegers[i] = Integer.parseInt(numbersString[i]);
+			} catch (NumberFormatException nfe) {};
+		}
+
+		for (int i = 0; i < userNumbersDraw.size(); i++) {
+			for (int j = 0; j < numbersIntegers.length; j++) {
+				if (userNumbersDraw.get(i) == numbersIntegers[j]) {
+					correctNumbers.add(i);
+				}
+			}
+		}
+
+		String[] starsString = outputStars.split(",");
+
+		int[] starsIntegers = new int[starsString.length];
+
+		for (int i = 0; i < starsString.length; i++) {
+			try {
+				starsIntegers[i] = Integer.parseInt(starsString[i]);
+			} catch (NumberFormatException nfe) {};
+		}
+
+		for (int i = 0; i < userStarsDraw.size(); i++) {
+			for (int j = 0; j < starsIntegers.length; j++) {
+				if (userStarsDraw.get(i) == starsIntegers[j])
+					correctStars.add(i);
+			}
+		}	
+	}
+
+	public LinkedList<Integer> getCorrectNumbers() {
+		return correctNumbers;
+	}
+	
+	public void setCorrectNumbers(LinkedList<Integer> correctNumbers) {
+		this.correctNumbers = correctNumbers;
+	}
+	
+	public LinkedList<Integer> getCorrectStars() {
+		return correctStars;
+	}
+	
+	public void setCorrectStars(LinkedList<Integer> correctStars) {
+		this.correctStars = correctStars;
+	}
+	
+	public String retreiveResults() throws IOException {
+
+		connect();
 
 		numbers = EuromillionsDocument.select("#results-content li:not(.extra-numbers li)").text();
 		outputNumbers = numbers.replace(" ", ",");
@@ -38,26 +102,29 @@ public class Drawer {
 		String date = EuromillionsDocument.select("#results-content h2").text();
 
 		if (language.equals("UK")){
-			
+
 			String dateOutput = null;
-			
+
 			if (date.contains("Sexta-feira"))
 				dateOutput = date.replace("Sexta-feira", "Friday");
 
 			if (date.contains("Terça-feira"))
 				dateOutput = date.replace("Terça-feira", "Tuesday");
-			
+
 			finalOutput = "<html><center> " + dateOutput + "<br> Numbers: [" + outputNumbers + "] | Stars: [" + outputStars + "]; </center></html>";
 		}
-		
+
 		else
 			finalOutput = "<html><center> " + date + "<br> Números: [" + outputNumbers + "] | Estrelas: [" + outputStars + "]; </center></html>";
-	
-		return finalOutput;
 
+		return finalOutput;
 	}
 
-	public void checkNumbers() {
+	public String getOutputNumbers() {
+		return outputNumbers;
+	}
+
+	private void checkNumbers() {
 
 		for (int i = 1; i < numbers_Draw.size(); i++) {
 
@@ -68,9 +135,9 @@ public class Drawer {
 				drawn = r.nextInt(51);
 				numbers_Draw.addLast(drawn);	
 			}
-				
+
 			for (int p = 0; p < numbers_Draw.size()-1; p++) {
-				
+
 				if (numbers_Draw.get(k).equals(numbers_Draw.get(p)) && ( i != p)) {
 
 					numbers_Draw.remove(p);
@@ -78,7 +145,7 @@ public class Drawer {
 					numbers_Draw.addLast(drawn);
 					i = 0;
 				}	
-				
+
 				if (numbers_Draw.get(k).equals(0)) {
 
 					numbers_Draw.remove(k);
@@ -90,7 +157,7 @@ public class Drawer {
 		}
 	}
 
-	public void checkStars() {
+	private void checkStars() {
 
 		for (int q = 0; q < stars_Draw.size(); q++) {
 
@@ -117,11 +184,10 @@ public class Drawer {
 				stars_Draw.add(drawn);
 				q--;
 			}
-
 		}
 	}
 
-	public void clear() {
+	private void clear() {
 
 		numbers_Draw.clear();
 		stars_Draw.clear();
@@ -155,11 +221,10 @@ public class Drawer {
 			Collections.sort(stars_Draw);
 			addResult();
 			clear();
-
 		}
 	}
 
-	public void addResult() {
+	private void addResult() {
 
 		draws.add(toString());
 	}
@@ -175,5 +240,4 @@ public class Drawer {
 			return " Numbers: " + numbers_Draw + "  | Stars: " + stars_Draw
 					+ "; \n";
 	}
-
 }
