@@ -29,8 +29,7 @@ public class Drawer {
 
 	private void connect() throws IOException {
 
-		EuromillionsDocument = Jsoup.connect("http://www.euromilhoes.com/").get();
-
+		EuromillionsDocument = Jsoup.connect("http://www.euromilhoes.com/").get();		
 	}
 	
 	public void compareWithdraw(LinkedList<Integer> userNumbersDraw , LinkedList<Integer> userStarsDraw ) throws IOException {
@@ -93,30 +92,37 @@ public class Drawer {
 
 		connect();
 
-		numbers = EuromillionsDocument.select("#results-content li:not(.extra-numbers li)").text();
+		numbers = EuromillionsDocument.select("ul.numbers :not(li.star)").text();
 		outputNumbers = numbers.replace(" ", ",");
 
-		stars = EuromillionsDocument.select(".extra-numbers li").text();
+		stars = EuromillionsDocument.select("li.star").text();
 		outputStars = stars.replace(" ", ",");
 
-		String date = EuromillionsDocument.select("#results-content h2").text();
+		String date = EuromillionsDocument.select(".title").text();
 
 		if (language.equals("UK")){
 
 			String dateOutput = null;
 
-			if (date.contains("Sexta-feira"))
-				dateOutput = date.replace("Sexta-feira", "Friday");
-
-			if (date.contains("Terça-feira"))
-				dateOutput = date.replace("Terça-feira", "Tuesday");
-
+			if (date.contains("Sexta")) {
+				dateOutput = date.replace("Resultados EuroMilhões - Sexta", "Friday");
+				dateOutput = dateOutput.replace("Ver a chave do EuroMilhoes", "");
+			}
+			
+			if (date.contains("Terça")){
+				dateOutput = date.replace("Resultados EuroMilhões - Terça", "Tuesday");
+				dateOutput = dateOutput.replace("Ver a chave do EuroMilhoes", "");
+			}
+			
 			finalOutput = "<html><center> " + dateOutput + "<br> Numbers: [" + outputNumbers + "] | Stars: [" + outputStars + "]; </center></html>";
 		}
 
-		else
+		else {
+			date = date.replace("Resultados EuroMilhões - ", "");
+			date = date.replace("Ver a chave do EuroMilhoes", "");
 			finalOutput = "<html><center> " + date + "<br> Números: [" + outputNumbers + "] | Estrelas: [" + outputStars + "]; </center></html>";
-
+		}
+		
 		return finalOutput;
 	}
 
