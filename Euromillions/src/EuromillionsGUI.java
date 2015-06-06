@@ -81,6 +81,7 @@ public class EuromillionsGUI {
 		buttonsList.add(compareDrawButton);
 		buttonsList.add(goCompareDrawButton);
 		buttonsList.add(backCompareButton);
+		buttonsList.add(clearButton);
 
 		for (JButton button : buttonsList) {
 			button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -216,7 +217,6 @@ public class EuromillionsGUI {
 				for (JTextField numberField : numberTextFieldList) {
 					intAux = Integer.parseInt(numberField.getText());
 					numbersTempList.add(intAux);
-					System.out.println(numbersTempList);
 				}
 
 				for (JTextField starField : starsTextFieldList) {
@@ -250,7 +250,6 @@ public class EuromillionsGUI {
 					e1.printStackTrace();
 				}
 
-				System.out.println("WWWW" + drawer.getCorrectNumbers());
 			}
 		});
 
