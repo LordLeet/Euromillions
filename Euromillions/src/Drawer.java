@@ -31,8 +31,11 @@ public class Drawer {
 
 		EuromillionsDocument = Jsoup.connect("http://www.euromilhoes.com/").get();		
 	}
-	
+
 	public void compareWithdraw(LinkedList<Integer> userNumbersDraw , LinkedList<Integer> userStarsDraw ) throws IOException {
+
+		correctNumbers.clear();
+		correctStars.clear();
 
 		connect();
 
@@ -70,24 +73,25 @@ public class Drawer {
 					correctStars.add(i);
 			}
 		}	
+
 	}
 
 	public LinkedList<Integer> getCorrectNumbers() {
 		return correctNumbers;
 	}
-	
+
 	public void setCorrectNumbers(LinkedList<Integer> correctNumbers) {
 		this.correctNumbers = correctNumbers;
 	}
-	
+
 	public LinkedList<Integer> getCorrectStars() {
 		return correctStars;
 	}
-	
+
 	public void setCorrectStars(LinkedList<Integer> correctStars) {
 		this.correctStars = correctStars;
 	}
-	
+
 	public String retreiveResults() throws IOException {
 
 		connect();
@@ -108,12 +112,12 @@ public class Drawer {
 				dateOutput = date.replace("Resultados EuroMilhões - Sexta", "Friday");
 				dateOutput = dateOutput.replace("Ver a chave do EuroMilhoes", "");
 			}
-			
+
 			if (date.contains("Terça")){
 				dateOutput = date.replace("Resultados EuroMilhões - Terça", "Tuesday");
 				dateOutput = dateOutput.replace("Ver a chave do EuroMilhoes", "");
 			}
-			
+
 			finalOutput = "<html><center> " + dateOutput + "<br> Numbers: [" + outputNumbers + "] | Stars: [" + outputStars + "]; </center></html>";
 		}
 
@@ -122,7 +126,7 @@ public class Drawer {
 			date = date.replace("Ver a chave do EuroMilhoes", "");
 			finalOutput = "<html><center> " + date + "<br> Números: [" + outputNumbers + "] | Estrelas: [" + outputStars + "]; </center></html>";
 		}
-		
+
 		return finalOutput;
 	}
 

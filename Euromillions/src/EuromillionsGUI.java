@@ -23,8 +23,8 @@ public class EuromillionsGUI {
 	private static final int NUMBERS = 5;
 	private static final int STARS = 2;
 
-	private String[] ptArray = {"Gerar", "Ver Sorteio", "Gerar quantas vezes? ", "Voltar" , "Números: " , "Estrelas: " , "Verificar" , "Comparar"};
-	private String[] ukArray = {"Draw", "Check draw" , "Number of draws? " , "Back" , "Numbers: " , "Stars: " , "Check" , "Compare draw"};
+	private String[] ptArray = {"Gerar", "Ver Sorteio", "Gerar quantas vezes? ", "Voltar" , "Números: " , "Estrelas: " , "Verificar" , "Comparar", "Limpar"};
+	private String[] ukArray = {"Draw", "Check draw" , "Number of draws? " , "Back" , "Numbers: " , "Stars: " , "Check" , "Compare draw" , "Clear"};
 
 	private LinkedList<JTextField> numberTextFieldList = new LinkedList<JTextField>();
 	private LinkedList<JTextField> starsTextFieldList = new LinkedList<JTextField>();
@@ -49,6 +49,7 @@ public class EuromillionsGUI {
 	private JButton compareDrawButton = new JButton();
 	private JButton goCompareDrawButton = new JButton();
 	private JButton backCompareButton = new JButton();
+	private JButton clearButton =new JButton();
 
 	private JTextField input = new JTextField(2);
 
@@ -120,6 +121,7 @@ public class EuromillionsGUI {
 		compareDrawFrame.add(drawComparingButtonContainer, BorderLayout.SOUTH);
 		drawComparingButtonContainer.add(compareDrawButton);
 		drawComparingButtonContainer.add(backCompareButton);
+		drawComparingButtonContainer.add(clearButton);
 
 		drawCheckCompareFrame.setLayout(new FlowLayout());
 		drawCheckCompareFrame.setSize(320, 65);
@@ -214,6 +216,7 @@ public class EuromillionsGUI {
 				for (JTextField numberField : numberTextFieldList) {
 					intAux = Integer.parseInt(numberField.getText());
 					numbersTempList.add(intAux);
+					System.out.println(numbersTempList);
 				}
 
 				for (JTextField starField : starsTextFieldList) {
@@ -234,7 +237,7 @@ public class EuromillionsGUI {
 						textField.setBackground(new Color(139,0,0));
 						textField.setForeground(Color.WHITE);
 					}
-					
+
 					for (int i = 0; i < drawer.getCorrectNumbers().size(); i++) {
 						numberTextFieldList.get(drawer.getCorrectNumbers().get(i)).setBackground(new Color(34,139,34));
 					}
@@ -246,6 +249,17 @@ public class EuromillionsGUI {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+
+				System.out.println("WWWW" + drawer.getCorrectNumbers());
+			}
+		});
+
+		clearButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				clearCompare();
 			}
 		});
 
@@ -342,6 +356,21 @@ public class EuromillionsGUI {
 		g.init();
 	}
 
+	private void clearCompare() {
+
+		for (JTextField textField : numberTextFieldList) {
+			textField.setBackground(Color.WHITE);
+			textField.setForeground(Color.BLACK);
+			textField.setText("");
+		}
+
+		for (JTextField textField : starsTextFieldList) {
+			textField.setBackground(Color.WHITE);
+			textField.setForeground(Color.BLACK);
+			textField.setText("");
+		}
+	}
+
 	private void assignStrings() {
 
 		if (drawer.language.equals("UK")) {
@@ -356,6 +385,7 @@ public class EuromillionsGUI {
 			compareDrawButton.setText(ukArray[6]);
 			goCompareDrawButton.setText(ukArray[7]);	
 			backCompareButton.setText(ukArray[3]);
+			clearButton.setText(ukArray[8]);
 		}
 
 		if (drawer.language.equals("P")) {
@@ -370,6 +400,7 @@ public class EuromillionsGUI {
 			compareDrawButton.setText(ptArray[6]);
 			goCompareDrawButton.setText(ptArray[7]);
 			backCompareButton.setText(ptArray[3]);
+			clearButton.setText(ptArray[8]);
 		}
 	}
 }
